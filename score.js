@@ -12,7 +12,7 @@ function runAnalysis() {
   _.range(1,15).forEach(k => {
     const accuracy = _.chain(testSet)
                       // take the training set and the dropPoint from each test set and compare the result to the testSet's bucket
-                      .filter(testPoint => knn(trainingSet, testPoint[0], k) === testPoint[3])
+                      .filter(testPoint => knn(trainingSet, _.initial(testPoint), k) === testPoint[3])
                       // get the size of the array of matching test and training buckets
                       .size()
                       // divide the size by the testSize i.e. 4 correct / 10 total = 40% accurate
@@ -24,8 +24,15 @@ function runAnalysis() {
 }
 
 function knn (data, point, k) {
+  // point is an array with THREE values, all the values from testSet less the bucket
   return _.chain(data)
-            .map(row => [distancePoint(row[0], point), row[3]])
+            .map(row => {
+              return [
+                distancePoint(_.initial(row), point),
+                // last (row) is the bucket number
+                _.last(row)
+              ];
+            }) 
             // sort by abs dropPosition
             .sortBy(row => row[0])
             // slice from 0 to k nearest neighbors
