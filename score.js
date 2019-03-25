@@ -4,7 +4,6 @@ const k = 3;
 
 function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
   outputs.push([...arguments]);
-  runAnalysis();
 }
 
 function runAnalysis() {
@@ -34,4 +33,12 @@ function runAnalysis() {
 
 function distancePoint (point) {
   return Math.abs(point - predictionPoint);
+}
+
+function splitDataSet (data, testCount) {
+  const shuffled = _.shuffle(data);
+  const testSet = _.slice(shuffled, 0, testCount);
+  const trainingSet = _.slice(shuffled, testCount);
+
+  return [testSet, trainingSet];
 }
