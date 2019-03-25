@@ -1,23 +1,15 @@
 const outputs = [];
+const predictionPoint = 300;
+const k = 3;
 
 function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
   outputs.push([...arguments]);
-  console.log(outputs);
+  runAnalysis();
 }
 
 function runAnalysis() {
-  // Write code here to analyze stuff
-}
-
-const predictionPoint = 300;
-const k = 3;
-// bucket element might fall into based on three nearest neighbors' buckets
-
-function distancePoint (point) {
-  return Math.abs(point - predictionPoint);
-}
-function kNearestNeighbor (outputs) {
-  return _.chain(outputs)
+  // bucket element might fall into based on three nearest neighbors' buckets
+  const bucket = _.chain(outputs)
             .map(row => [distancePoint(row[0]), row[3]])
             // sort by abs dropPosition
             .sortBy(row => row[0])
@@ -37,4 +29,9 @@ function kNearestNeighbor (outputs) {
             .parseInt()
             // end the chain by returning a value()
             .value()
+    console.log(`Your ball will probably fall in bucket #${bucket}`);
+}
+
+function distancePoint (point) {
+  return Math.abs(point - predictionPoint);
 }
