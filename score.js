@@ -47,7 +47,14 @@ function knn (data, point, k) {
 }
 
 function distancePoint (pointA, pointB) {
-  return Math.abs(pointA - pointB);
+  return _.chain(pointA)
+            // make a new array that pairs the corresponding values from pointA to pointB 
+            .zip(pointB)
+            // use array destructuring to take out an element from pointA array and its corresponding element from the pointB array. Subtract the values and square the result
+            .map(([a,b]) => (a-b) **2)
+            .sum()
+            // take the square root of the result, and it's equal to the hypotenuse
+            .value() ** 0.5;
 }
 
 function splitDataSet (data, testCount) {
