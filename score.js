@@ -1,6 +1,6 @@
 const outputs = [];
 const predictionPoint = 300;
-const k = 3;
+
 
 function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
   outputs.push([...arguments]);
@@ -9,15 +9,21 @@ function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
 function runAnalysis() {
   const testSize = 10;
   const [testSet, trainingSet] = splitDataSet(outputs, testSize);
-  let numCorrect = 0;
-  for(let i = 0; i < testSet.length; i++){
-    const bucket = knn(trainingSet, testSet[i][0]);
-    bucket === testSet[i][3] && numCorrect++;
-  }
-  console.log('Accuracy: ', numCorrect/ testSize);
+  _.range(1,15).forEach(k => {
+    const accuracy = _.chain(testSet)
+                      // take the training set and the dropPoint from each test set and compare the result to the testSet's bucket
+                      .filter(testPoint => knn(trainingSet, testPoint[0], k) === testPoint[3])
+                      // get the size of the array of matching test and training buckets
+                      .size()
+                      // divide the size by the testSize i.e. 4 correct / 10 total = 40% accurate
+                      .divide(testSize)
+                      .value()
+    console.log('Accuracy: ', accuracy);
+  })
+  
 }
 
-function knn (data, point) {
+function knn (data, point, k) {
   return _.chain(data)
             .map(row => [distancePoint(row[0], point), row[3]])
             // sort by abs dropPosition
