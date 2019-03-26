@@ -9,7 +9,7 @@ function onScoreUpdate(dropPosition, bounciness, size, bucketLabel) {
 function runAnalysis() {
   const testSize = 10;
   const [testSet, trainingSet] = splitDataSet(outputs, testSize);
-  _.range(1,15).forEach(k => {
+  const k = 10
     const accuracy = _.chain(testSet)
                       // take the training set and the dropPoint from each test set and compare the result to the testSet's bucket
                       .filter(testPoint => knn(trainingSet, _.initial(testPoint), k) === testPoint[3])
@@ -18,9 +18,7 @@ function runAnalysis() {
                       // divide the size by the testSize i.e. 4 correct / 10 total = 40% accurate
                       .divide(testSize)
                       .value()
-    console.log('Accuracy: ', accuracy);
-  })
-  
+    console.log('Accuracy: ', accuracy);  
 }
 
 function knn (data, point, k) {
