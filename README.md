@@ -1,4 +1,4 @@
-# Rembr
+# KNN Plinko Game
 
 This is the browser version of the popular Plinko game as seen on The Price is Right
 
